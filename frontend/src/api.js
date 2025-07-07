@@ -35,7 +35,9 @@ api.interceptors.response.use(
     if (error.response?.status === 400) {
       throw new Error(error.response.data?.detail || 'Invalid request');
     } else if (error.response?.status === 404) {
-      throw new Error('Video not found or unavailable');
+      throw new Error(error.response.data?.detail || 'Video not found or unavailable');
+    } else if (error.response?.status === 429) {
+      throw new Error(error.response.data?.detail || 'YouTube is currently blocking requests. Please try again in a few minutes.');
     } else if (error.response?.status === 500) {
       throw new Error('Server error occurred while processing the video');
     } else if (error.code === 'ECONNABORTED') {

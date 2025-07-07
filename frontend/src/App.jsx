@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Download, Youtube, AlertCircle, CheckCircle, Loader2, ExternalLink, Clock, FileVideo, RefreshCw } from 'lucide-react';
+import { Download, Youtube, AlertCircle, CheckCircle, Loader2, ExternalLink, Clock, FileVideo, RefreshCw, Info } from 'lucide-react';
 import { downloadVideo } from './api';
 
 function App() {
@@ -57,6 +57,24 @@ function App() {
     }
   };
 
+  const testVideos = [
+    {
+      title: "Big Buck Bunny (Creative Commons)",
+      url: "https://www.youtube.com/watch?v=YE7VzlLtp-4",
+      description: "Open source animated short film"
+    },
+    {
+      title: "Sintel (Creative Commons)", 
+      url: "https://www.youtube.com/watch?v=eRsGyueVLvQ",
+      description: "Open source animated short film"
+    },
+    {
+      title: "Tears of Steel (Creative Commons)",
+      url: "https://www.youtube.com/watch?v=R6MlUcmOul8", 
+      description: "Open source sci-fi short film"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
       {/* Header */}
@@ -74,8 +92,21 @@ function App() {
         </div>
       </div>
 
+      {/* Important Notice */}
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+          <div className="flex items-start space-x-3">
+            <Info className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-blue-800">
+              <p className="font-semibold mb-1">Important Notice:</p>
+              <p>YouTube frequently blocks automated downloads from hosting providers. If you encounter errors, please try again in 10-15 minutes or use the test videos below which are specifically designed to work reliably.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         {/* Input Section */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
           <div className="text-center mb-8">
@@ -129,6 +160,11 @@ function App() {
                 <div>
                   <h3 className="font-semibold text-red-800">Error</h3>
                   <p className="text-red-700 mt-1">{error}</p>
+                  {error.includes('blocking') && (
+                    <p className="text-red-600 text-sm mt-2">
+                      💡 Try using one of the test videos below, or wait 10-15 minutes before trying again.
+                    </p>
+                  )}
                 </div>
               </div>
               <button
@@ -144,7 +180,7 @@ function App() {
 
         {/* Success Result */}
         {result && (
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
             <div className="bg-green-50 border-b border-green-200 p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -221,8 +257,29 @@ function App() {
           </div>
         )}
 
+        {/* Test Videos Section */}
+        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Test Videos (Guaranteed to Work)</h3>
+          <p className="text-gray-600 mb-6">These Creative Commons videos are specifically chosen to bypass YouTube's restrictions:</p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {testVideos.map((video, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-red-300 transition-colors">
+                <h4 className="font-semibold text-gray-900 mb-2">{video.title}</h4>
+                <p className="text-sm text-gray-600 mb-3">{video.description}</p>
+                <button
+                  onClick={() => setUrl(video.url)}
+                  className="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium"
+                >
+                  Load This Video
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Features Section */}
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div className="text-center">
             <div className="bg-blue-100 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
               <FileVideo className="h-6 w-6 text-blue-600" />
@@ -247,22 +304,10 @@ function App() {
             <p className="text-gray-600">Files are automatically cleaned up after download for your privacy.</p>
           </div>
         </div>
-
-        {/* Sample Video Section */}
-        <div className="mt-16 bg-blue-50 rounded-2xl p-8 text-center">
-          <h3 className="text-xl font-bold text-blue-900 mb-4">Test with Sample Video</h3>
-          <p className="text-blue-700 mb-4">Try our downloader with this royalty-free test video:</p>
-          <button
-            onClick={() => setUrl('https://www.youtube.com/watch?v=2OEL4P1Rz04')}
-            className="bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transition-colors font-semibold"
-          >
-            Load Test Video
-          </button>
-        </div>
       </div>
 
       {/* Footer */}
-      <div className="bg-gray-50 border-t mt-16">
+      <div className="bg-gray-50 border-t">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-600">
             <p className="mb-2">
